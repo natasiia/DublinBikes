@@ -1,5 +1,6 @@
 import requests
 from sqlalchemy import create_engine
+import json
 
 api_key = 'ef8a3722135be9a302f5ea61c8a732ae'
 
@@ -48,3 +49,19 @@ try:
     print(res.fetchall())
 except Exception as e:
     print(e)
+
+#inserting rows into weather_history table
+def weather_to_db(weather_data):
+    
+    sql_insert = "INSERT INTO weather_history (date_time, weather_id, weather_main, weather_description, temperature, temp_feels_like,pressure, humidity, visibility, wind_speed,rain_volume) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"   
+    vals = (int(weather_data["dt"]), weather_data["weather"][0]["id"], weather_data["weather"][0]["main"], weather_data["weather"][0]["description"], weather_data["main"]["temp"], weather_data["main"]["feels_like"], weather_data["main"]["pressure"], weather_data["main"]["humidity"], weather_data["visibility"], weather_data["wind"]["speed"], weather_data.get("rain", {}).get("1h", None))
+    
+    #execute query
+    try:
+        engine.execute(sql_insert, vals)
+    except Exception as e:
+        print("Error inserting row:", e)
+
+    return
+
+weather_to_db(weather_data)

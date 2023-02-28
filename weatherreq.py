@@ -21,7 +21,7 @@ PORT = "3306"
 DB = "dbbikes"
 USER = "anastasiia"
 
-# MySQL-connector-python
+#MySQL-connector-python
 engine = create_engine("mysql+mysqlconnector://{}:{}@{}:{}/{}".format(USER, PASSWORD, URI, PORT, DB), echo = True)
 
 for res in engine.execute("SHOW VARIABLES;"):

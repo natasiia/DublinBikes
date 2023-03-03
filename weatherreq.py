@@ -2,7 +2,7 @@ import requests
 from sqlalchemy import create_engine
 import json
 
-api_key = 'ef8a3722135be9a302f5ea61c8a732ae'
+api_key = 'api_key'
 
 city = 'Dublin'
 country_code = 'ie'

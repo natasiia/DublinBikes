@@ -1,53 +1,74 @@
-from flask import Flask, render_template, json, request
-from db import get_availability_data, get_weather_data, get_station_data, get_station
-import pandas as pd  # can use to parse dates
+import json
 
-app = Flask(__name__)
+from flask import Flask, session, url_for, request, render_template, redirect, g
+import os
+import application.dataContext as dbContext
+import application.utils as utils
 
-
-# need to load static data from json file
-# with open('./static/dublin.json') as file:
-#     stations = json.load(file)
-# try using function, receive error when called directly
-def load_data(filepath):
-    """fetching json file with static station data"""
-    with open(filepath) as file:
-        json_data = json.load(file)
-    return json_data
+app = Flask(__name__, template_folder='templates')
+app.secret_key = os.urandom(24)
 
 
-station_data = load_data('static/dublin.json')
-
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    """Loading the main index.html page"""
-    # bikes = get_availability_data()
-    # weather = get_weather_data()
+    if request.method == 'POST':
+        session.pop('user', None)
+        if dbContext.login(request.form['email'], request.form['password']):
+            session['user'] = request.form['email']
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template('index.html', results=False)
+    if session.get('from_register_page'):
+        return render_template('index.html', from_register_page=True)
+    return render_template('index.html')
 
-    # store dates in list
-    dates = []
-    # for data in range(len(weather)):
-    # print(data)
-    # date = (pd.to_datetime(weather[data][0]))
-    # if date not in dates:
-    #     dates.append(date)
 
-    #
-    return render_template("index.html", stations=get_station_data(), bikes=get_availability_data(),
-                           weather=get_weather_data())
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        validation_results = utils.validate_register_information(request.form['firstName'], request.form['lastName'],
+                                                                 request.form['email'], request.form['password'],
+                                                                 request.form['confirmPassword'])
+        if not validation_results.results:
+            return render_template('register.html', errors=validation_results.data)
+
+        results = dbContext.register(request.form['firstName'], request.form['lastName'], request.form['email'],
+                                     request.form['password'])
+        if results[0]:
+            session['from_register_page'] = True
+            return redirect(url_for('index', from_register_page=True))
+        else:
+            return render_template('register.html', errors=results[1])
+    return render_template('register.html')
 
 
 @app.route('/searchStation', methods=['GET'])
 def search_station():
-    data = get_station(name=request.args.get('name'))
-    return json.dumps(data[0])
+    try:
+        # return "Pew Pew", 404
+        data = dbContext.get_station(name=request.args.get('name'))
+        if len(data) < 1:
+            return "Station not found.", 404
+        return json.dumps(data[0])
+
+    except Exception as e:
+        return f"Something went wrong. Please try again. {e}", 500
 
 
-# @app.route('/retrieveWeather', methods=['GET'])
-# def set_weather():
-#     data = set_weather(date=request.args.get('date'))
+@app.route('/dashboard')
+def dashboard():
+    if g.user:
+        return render_template("dashboard.html", stations=dbContext.get_station_data(), bikes=dbContext.get_availability_data(),
+                               weather=dbContext.get_weather_data())
+    return redirect(url_for('index'))
 
 
-if __name__ == "__main__":
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
+
+
+if __name__ == '__main__':
     app.run(debug=True)

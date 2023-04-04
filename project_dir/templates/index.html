@@ -1,128 +1,80 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="stylesheet" href="../static/Styles.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-			integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
-			crossorigin="anonymous"
-			referrerpolicy="no-referrer"
-		/>
-		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-		<title>Dublin Bikes</title>
-	</head>
-	<body>
-		<div class="search-container frosted-glass">
-			<i class="fa fa-search" aria-hidden="true" class="search-icon"></i>
-			<input type="text" id="search-bar" class="search-bar" placeholder="Search a station..." />
-		</div>
-		<div class="card-container">
-			<div class="info-card frosted-glass">
-				<div>
-					<h5>BIKES AVAILABLE</h5>
-				</div>
-				<h3 id="available-bikes"></h3>
-			</div>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='../static/styles/login.css') }}"
+    />
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="login-container">
+      <form action="/" method="post">
+        <h1>Login</h1>
+        <label for="email">Email</label>
+        <input required id="email" type="text" name="email" placeholder="" />
+        <label for="password">Password</label>
+        <input
+          required
+          id="password"
+          type="password"
+          name="password"
+          placeholder=""
+        />
+        <button type="submit">Login</button>
+        <a href="{{ url_for('register') }}">Need an account?</a>
+      </form>
+    </div>
+    {% if from_register_page is defined %}
 
-			<div class="info-card frosted-glass">
-				<div>
-					<h5>STATION</h5>
-				</div>
-				<h3 id="station"></h3>
-			</div>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script>
+      Toastify({
+        text: "Registration successful, please login",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "green",
+        },
+      }).showToast();
+    </script>
 
-			<div class="info-card frosted-glass">
-				<div>
-					<h5>STATUS</h5>
-				</div>
-				<h3 id="status"></h3>
-			</div>
+    {% endif %} {% if results is defined %}
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script>
+      Toastify({
+        text: "Invalid login credential",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "red",
+        },
+      }).showToast();
+    </script>
 
-			<div class="info-card frosted-glass">
-				<div>
-					<h5>STANDS AVAILABLE</h5>
-				</div>
-				<h3 id="available-stands"></h3>
-			</div>
-		</div>
-
-		<div class="main-container">
-			<iframe
-				src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d152515.25477516183!2d-6.386128801808176!3d53.32444273531623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48670e80ea27ac2f%3A0xa00c7a9973171a0!2sDublin%2C%20Ireland!5e0!3m2!1sen!2sza!4v1677703924780!5m2!1sen!2sza"
-				width="400"
-				height="150"
-				style="border: 0"
-				allowfullscreen=""
-				loading="lazy"
-				referrerpolicy="no-referrer-when-downgrade"
-				class="google-map frosted-glass"
-			></iframe>
-			<div class="weather-container">
-				<h2>Weather</h2>
-				<div class="weather-info frosted-glass">
-					<div class="temp-info">
-						<img
-							src="https://cdn-icons-png.flaticon.com/512/263/263883.png"
-							alt=""
-							class="image"
-						/>
-						<p id="temperature">7.51°C</p>
-						<p id="description">broken clouds</p>
-					</div>
-				</div>
-
-				<div class="temp-info-detailed frosted-glass">
-					<h3>Feels Like</h3>
-					<p>7.51°C</p>
-					<h3>Weather Description</h3>
-					<p>7.51°C</p>
-					<h3>Min Temperature</h3>
-					<p>7.51°C</p>
-					<h3>Wind Speed</h3>
-					<p id="wind">4.1</p>
-				</div>
-			</div>
-		</div>
-	</body>
-	<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-		<script>
-		var weatherInfo = {
-				temperature: document.getElementById('temperature'),
-				weather_description: document.getElementById('description'),
-				wind_speed: document.getElementById('wind'),
-				date: document.getElementById('date'),
-			}
-		var stationInfo = {
-				availableBikes: document.getElementById('available-bikes'),
-				status: document.getElementById('status'),
-				station: document.getElementById('station'),
-				availableStands: document.getElementById('available-stands'),
-			}
-			$(".search-bar").on('keyup', function (e) {
-				if (e.key === 'Enter' || e.keyCode === 13) {
-					let name = $(".search-bar").val()
-					$.ajax({
-						url: "/searchStation?name="+name,
-						cache: false,
-						type: 'GET',
-						success: function(results){
-<!--							console.log(JSON.parse(results));-->
-							let data = JSON.parse(results);
-							stationInfo.station.innerHTML = data[0]
-							stationInfo.availableStands.innerHTML = data[1]
-							stationInfo.availableBikes.innerHTML = data[2]
-							stationInfo.status.innerHTML = data[3]
-<!--							weatherInfo.temperature = data[]-->
-						}
-					});
-				}
-			});
-
-			var bikes = JSON.parse('{{ bikes | tojson | safe}}');
-			var weather = JSON.parse('{{ weather | tojson | safe}}');
-			var stations = JSON.parse('{{ stations | tojson | safe}}');
-
-		</script>
+    {% endif %}
+  </body>
 </html>

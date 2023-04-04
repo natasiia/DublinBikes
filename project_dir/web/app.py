@@ -2,8 +2,8 @@ import json
 
 from flask import Flask, session, url_for, request, render_template, redirect, g
 import os
-import application.dataContext as dbContext
-import application.utils as utils
+import dbContext
+import utils
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.urandom(24)

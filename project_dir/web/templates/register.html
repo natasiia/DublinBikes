@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/register.css') }}"
+    />
+    <title>Register</title>
+  </head>
+  <body>
+    <div class="register-container">
+      <form action="/register" method="post">
+        <h1>Register</h1>
+
+        <label for="firstName">First Name</label>
+        <input
+          required
+          id="firstName"
+          type="text"
+          name="firstName"
+          placeholder=""
+        />
+        <span class="invalid-span" id="invalidFirstName"></span>
+
+        <label for="lastName">Last Name</label>
+        <input
+          required
+          id="lastName"
+          type="text"
+          name="lastName"
+          placeholder=""
+        />
+        <span class="invalid-span" id="invalidLastName"></span>
+
+        <label for="email">Email</label>
+        <input required id="email" type="text" name="email" placeholder="" />
+        <span class="invalid-span" id="invalidEmail"></span>
+
+        <label for="password">Password</label>
+        <input
+          required
+          id="password"
+          type="password"
+          name="password"
+          placeholder=""
+        />
+        <span class="invalid-span" id="invalidPassword"></span>
+
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          required
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          placeholder=""
+        />
+        <span class="invalid-span" id="invalidConfirmPassword"></span>
+
+        <button type="submit">Register</button>
+        <a href="{{ url_for('index') }}">Already have an account?</a>
+      </form>
+    </div>
+    <script>
+      var errors = undefined
+        {% if errors is defined %}
+           errors =  JSON.parse('{{ errors | tojson | safe}}');
+        {% endif %}
+        if (errors != undefined){
+             errors.forEach(item => {
+                  switch(item[1]) {
+                      case 'FirstName':
+                          document.getElementById('invalidFirstName').textContent  = item[0]
+                          break;
+                      case 'LastName':
+                          document.getElementById('invalidLastName').textContent  = item[0]
+                          break;
+                      case 'ConfirmPassword':
+                          document.getElementById('invalidConfirmPassword').textContent  = item[0]
+                          break;
+                      case 'Password':
+                          document.getElementById('invalidPassword').setHTML(document.getElementById('invalidPassword').getInnerHTML() +`<li>${item[0]}</li>`)
+                          break;
+                      case 'Email':
+                          document.getElementById('invalidEmail').setHTML(document.getElementById('invalidEmail').getInnerHTML() +`<li>${item[0]}</li>`)
+                          break;
+                  }
+             })
+        }
+    </script>
+  </body>
+</html>

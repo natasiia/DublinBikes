@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/login.css') }}"
+    />
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="login-container">
+      <form action="/" method="post">
+        <h1>Login</h1>
+        <label for="email">Email</label>
+        <input required id="email" type="text" name="email" placeholder="" />
+        <label for="password">Password</label>
+        <input
+          required
+          id="password"
+          type="password"
+          name="password"
+          placeholder=""
+        />
+        <button type="submit">Login</button>
+        <a href="{{ url_for('register') }}">Need an account?</a>
+      </form>
+    </div>
+    {% if from_register_page is defined %}
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script>
+      Toastify({
+        text: "Registration successful, please login",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "green",
+        },
+      }).showToast();
+    </script>
+
+    {% endif %} {% if results is defined %}
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script>
+      Toastify({
+        text: "Invalid login credential",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "red",
+        },
+      }).showToast();
+    </script>
+
+    {% endif %}
+  </body>
+</html>

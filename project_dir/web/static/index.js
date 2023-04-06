@@ -32,16 +32,29 @@ $(".search-bar").on("keyup", function (e) {
 });
 
 function initMap() {
-  const myLatLng = { lat: -25.363, lng: 131.044 };
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 4,
-    center: myLatLng,
+    zoom: 13,
+    center: { lat: 53.35014, lng: -6.266155 },
   });
 
-  new google.maps.Marker({
-    position: myLatLng,
-    map,
-    title: "Hello World!",
+  // Create an info window to share between markers.
+  const infoWindow = new google.maps.InfoWindow();
+
+  stations.forEach((station, index) => {
+    const marker = new google.maps.Marker({
+      position: { lat: station.position_lat, lng: station.position_lng },
+      label: (index + 1).toString(),
+      map: map,
+      title: station.name,
+      optimized: false,
+    });
+
+    // Add a click listener for each marker, and set up the info window.
+    marker.addListener("click", () => {
+      infoWindow.close();
+      infoWindow.setContent(marker.getTitle());
+      infoWindow.open(marker.getMap(), marker);
+    });
   });
 }
 

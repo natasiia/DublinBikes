@@ -1,7 +1,7 @@
 from utils import hash_password
 import config
 import pymysql
-
+import json
 
 # # specify connection details db_connection = pymysql.connect(host=config.hostname, user=config.username,
 # password=config.password, db=config.db_name, port=config.port)
@@ -63,18 +63,24 @@ def get_station_data():
     """Retrieves station data from the database"""
 
     # STATEMENT TO SELECT ALL DATA
-    select_stations = "SELECT name, number FROM dbbikes.station"
+    select_stations = "SELECT address, banking, bike_stands, bonus, contract_name, name, number, position_lat, position_lng FROM dbbikes.station"
+
     # Connection String
     cursor = db_connection.cursor()
     # Execute Statement
     cursor.execute(select_stations)
     # save the data
     select_stations = cursor.fetchall()
+    
+    # convert data to JSON format
+    station_data = []
+    for row in select_stations:
+        station_data.append({'address': row[0], 'banking': row[1], 'bike_stands': row[2], 'bonus': row[3], 'contract_name': row[4], 'name': row[5], 'number': row[6], 'position_lat': row[7], 'position_lng': row[8]})
+    
     db_connection.commit()
     db_connection.close()
-    # return availability data
-    return select_stations
-
+    # return availability data as JSON response
+    return json.dumps(station_data)
 
 def get_station(name):
     db_connection = get_db_connection()
@@ -105,18 +111,24 @@ def get_weather_data():
     """Retrieves weather data from the database"""
 
     # STATEMENT TO SELECT ALL DATA
-    select_weather = "SELECT weather_description, temperature, temp_feels_like, humidity FROM dbbikes.weather_history " \
-                     "ORDER BY date_time DESC LIMIT 1;"
+    select_weather = "SELECT weather_description, temperature, temp_feels_like, pressure, humidity, visibility, wind_speed FROM dbbikes.weather_history " \
+                     "ORDER BY date_time DESC LIMIT 1, 1;"
     # Connection String
     cursor = db_connection.cursor()
     # Execute Statement
     cursor.execute(select_weather)
     # save the data
     weather_data = cursor.fetchall()
+    
+    # convert data to JSON format
+    weather = []
+    for row in weather_data:
+        weather.append({'weather_description': row[0], 'temperature': row[1], 'temp_feels_like': row[2], 'pressure': row[3], 'humidity': row[4], 'visibility': row[5], 'wind_speed': row[6]})
+        
     db_connection.commit()
     db_connection.close()
     # return weather data
-    return weather_data
+    return json.dumps(weather)
 
 
 # retrieve data from database
@@ -132,7 +144,13 @@ def get_availability_data():
     cursor.execute(select_availability)
     # save the data
     availability_data = cursor.fetchall()
+    
+    # convert data to JSON format
+    availability = []
+    for row in availability_data:
+        availability.append({'entry_id': row[0], 'available_bikes': row[1], 'available_bike_stands': row[2], 'number': row[3], 'status': row[4], 'last_update': row[5]})
+    
     db_connection.commit()
     db_connection.close()
     # return availability data
-    return availability_data
+    return json.dumps(availability)

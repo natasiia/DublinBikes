@@ -11,6 +11,12 @@
       referrerpolicy="no-referrer"
     />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script type="module" src="./static/index.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEXSmH1FRzN_xwWqpJ1r44oFO87LmTXtM&callback=initMap"
+      async
+      defer
+    ></script>
     <title>Dublin Bikes</title>
   </head>
   <body>
@@ -53,17 +59,8 @@
       </div>
     </div>
 
+    <div id="map"></div>
     <div class="main-container">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d152515.25477516183!2d-6.386128801808176!3d53.32444273531623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48670e80ea27ac2f%3A0xa00c7a9973171a0!2sDublin%2C%20Ireland!5e0!3m2!1sen!2sza!4v1677703924780!5m2!1sen!2sza"
-        width="400"
-        height="150"
-        style="border: 0"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        class="google-map frosted-glass"
-      ></iframe>
       <div class="weather-container">
         <h2>Weather</h2>
         <div class="weather-info frosted-glass">
@@ -73,8 +70,8 @@
               alt=""
               class="image"
             />
-            <p id="temperature">{{(weather[0][1] - 273.15)|round(2)}}</p>
-            <p id="description">{{weather[0][0]}}</p>
+            <p id="temperature"></p>
+            <p id="description"></p>
           </div>
         </div>
 
@@ -90,55 +87,21 @@
         </div>
       </div>
     </div>
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"
+      integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      const stations = {{ stations | safe }};
+      const bikes = {{ bikes | safe }};
+      const weather = {{ weather | safe }};
+    </script>
   </body>
-  <script
-    src="https://code.jquery.com/jquery-3.6.3.min.js"
-    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"
-    integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  ></script>
-  <script>
-    var weather = JSON.parse("{{ weather | tojson | safe}}");
-    temperature: document.getElementById("temperature");
-    document.getElementById("description");
-    document.getElementById("wind");
-    document.getElementById("date");
-
-    var stationInfo = {
-      availableBikes: document.getElementById("available-bikes"),
-      status: document.getElementById("status"),
-      station: document.getElementById("station"),
-      availableStands: document.getElementById("available-stands"),
-    };
-    $(".search-bar").on("keyup", function (e) {
-      if (e.key === "Enter" || e.keyCode === 13) {
-        let name = $(".search-bar").val();
-        $.ajax({
-          url: "/searchStation?name=" + name,
-          cache: false,
-          type: "GET",
-          error: function (xhr, status, error) {
-            $("#search-bar").notify(xhr.responseText, "error");
-            <!--						console.log(xhr);-->
-          },
-          success: function (results) {
-            <!--							console.log(JSON.parse(results));-->
-            let data = JSON.parse(results);
-            stationInfo.station.innerHTML = data[0];
-            stationInfo.availableStands.innerHTML = data[1];
-            stationInfo.availableBikes.innerHTML = data[2];
-            stationInfo.status.innerHTML = data[3];
-          },
-        });
-      }
-    });
-
-    var bikes = JSON.parse("{{ bikes | tojson | safe}}");
-    var stations = JSON.parse("{{ stations | tojson | safe}}");
-  </script>
 </html>

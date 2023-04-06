@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
 * {
 
   padding: 0;
@@ -6,7 +7,8 @@
   font-family: 'Roboto', sans-serif;
 
 }
-body{
+
+body {
   background: url('https://images.unsplash.com/photo-1603485099313-1ce42aff2319?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -15,7 +17,12 @@ body{
   height: 100vh;
 }
 
-.search-container{
+#map {
+  height: 400px;
+  width: 400px;
+}
+
+.search-container {
   margin: 10px;
   border-radius: 5px;
   padding: 5px;
@@ -28,7 +35,7 @@ body{
   align-items: center;
 }
 
-.search-bar{
+.search-bar {
   width: 100%;
   outline: none;
   border: none;
@@ -39,17 +46,18 @@ body{
   font-weight: bolder;
 }
 
-::placeholder{
+::placeholder {
   color: rgb(0, 0, 0);
   font-weight: bolder;
 }
-.card-container{
+
+.card-container {
   padding: 5px;
   display: flex;
   flex-wrap: wrap;
-
 }
-.info-card{
+
+.info-card {
   flex: 1 1 0px;
   transition: 1s;
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
@@ -60,7 +68,7 @@ body{
 
 }
 
-.main-container{
+.main-container {
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -68,7 +76,7 @@ body{
 
 }
 
-.google-map{
+.google-map {
   border: 1px solid rgba(0, 0, 0, 0.135);
   margin: 10px;
   border-radius: 5px;
@@ -78,7 +86,7 @@ body{
 
 }
 
-.weather-container{
+.weather-container {
 
   width: 35%;
   min-height: 700px;
@@ -86,29 +94,30 @@ body{
 
 }
 
-.image{
+.image {
   max-width: 100px;
 }
-.weather-container h2{
+
+.weather-container h2 {
   background-color: rgba(241, 240, 240, 0.539);
   padding: 5px;
   color: rgb(0, 0, 0);
 }
 
-.weather-info{
+.weather-info {
   padding: 15px;
 
-  border-radius:0 0 5px 5px !important;
+  border-radius: 0 0 5px 5px !important;
 
 }
 
-.temp-info{
+.temp-info {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.frosted-glass{
+.frosted-glass {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -117,18 +126,20 @@ body{
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: .5s;
 }
-.temp-info-detailed{
+
+.temp-info-detailed {
   margin-top: 20px;
   padding: 15px;
 
   border: 1px solid rgba(0, 0, 0, 0.135);
 
 }
-.temp-info-detailed h3{
+
+.temp-info-detailed h3 {
   color: rgb(0, 0, 0);
   margin-top: 10px;
 }
 
-.frosted-glass:hover{
-  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px , rgba(255, 255, 255, 0.5) -3px -3px 6px 1px ;
+.frosted-glass:hover {
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px;
 }

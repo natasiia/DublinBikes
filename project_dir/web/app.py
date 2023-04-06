@@ -41,7 +41,6 @@ def register():
             return render_template('register.html', errors=results[1])
     return render_template('register.html')
 
-
 @app.route('/searchStation', methods=['GET'])
 def search_station():
     try:
@@ -58,10 +57,12 @@ def search_station():
 @app.route('/dashboard')
 def dashboard():
     if g.user:
-        return render_template("dashboard.html", stations=dbContext.get_station_data(), bikes=dbContext.get_availability_data(),
-                               weather=dbContext.get_weather_data())
+        stations = dbContext.get_station_data()
+        bikes = dbContext.get_availability_data()
+        weather = dbContext.get_weather_data()
+        
+        return render_template('dashboard.html', weather=weather, bikes=bikes, stations=stations)
     return redirect(url_for('index'))
-
 
 @app.before_request
 def before_request():
@@ -69,6 +70,9 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
+@app.template_filter("tojson")
+def tojson_filter(value):
+    return json.dumps(value)
 
 if __name__ == '__main__':
     app.run(debug=True)

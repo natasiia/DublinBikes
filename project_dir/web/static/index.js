@@ -41,29 +41,36 @@ function initMap() {
   const infoWindow = new google.maps.InfoWindow();
 
   stations.forEach((station, index) => {
+    let current_station_av = current_availability[station.name];
+
     const marker = new google.maps.Marker({
       position: { lat: station.position_lat, lng: station.position_lng },
       label: (index + 1).toString(),
       map: map,
       title: station.name,
+      description: current_station_av.available_bikes,
+      description2: current_station_av.available_stands,
+      status: current_station_av.status,
       optimized: false,
     });
 
     // Add a click listener for each marker, and set up the info window.
     marker.addListener("click", () => {
       infoWindow.close();
-      infoWindow.setContent(marker.getTitle());
+      let content = marker.getTitle();
+      content += "<br>Available Bikes: " + marker.description;
+
+      content += "<br>Available Stands: " + marker.description2;
+
+      content += "<br>Status: " + marker.status;
+
+      infoWindow.setContent(content);
       infoWindow.open(marker.getMap(), marker);
     });
   });
 }
 
-function initialize() {
-  console.log("Hello! 01");
-}
-
 // Call the initMap function after the Google Maps API has loaded
 window.onload = function () {
   initMap();
-  initialize();
 };

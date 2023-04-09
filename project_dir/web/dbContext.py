@@ -80,21 +80,21 @@ def get_station_data():
     db_connection.commit()
     db_connection.close()
     # return availability data as JSON response
-    return json.dumps(station_data)
+    return station_data
 
 def get_station(name):
     db_connection = get_db_connection()
     """Retrieves station data from the database"""
 
-    # STATEMENT TO SELECT ALL DATA
+     # STATEMENT TO SELECT ALL DATA
     select_station = "SELECT s.name, a.available_bike_stands, a.available_bikes, a.status FROM dbbikes.availability a " \
-                     "INNER JOIN dbbikes.station s ON a.number = s.number WHERE s.name LIKE '%" + name + "%' ORDER BY " \
-                                                                                                         "a.last_update LIMIT 1 "
+                     "INNER JOIN dbbikes.station s ON a.number = s.number WHERE s.name LIKE %s ORDER BY " \
+                     "a.last_update LIMIT 1"
 
     # Connection String
     cursor = db_connection.cursor()
     # Execute Statement
-    cursor.execute(select_station)
+    cursor.execute(select_station, (f"%{name}%",))
     # save the data
     select_stations = cursor.fetchall()
     db_connection.commit()

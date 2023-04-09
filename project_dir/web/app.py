@@ -57,11 +57,29 @@ def search_station():
 @app.route('/dashboard')
 def dashboard():
     if g.user:
-        stations = dbContext.get_station_data()
+        stations = json.dumps(dbContext.get_station_data())
         bikes = dbContext.get_availability_data()
         weather = dbContext.get_weather_data()
+        stations_current = dbContext.get_station_data()
+        current_availability = {}
         
-        return render_template('dashboard.html', weather=weather, bikes=bikes, stations=stations)
+        # Loop through each station
+        for station in stations_current:
+            # Get the most recent availability data for this station
+            availability = dbContext.get_station(station["name"])
+            # Create a dictionary with the station name, available bikes, and available stands
+            # Make sure availability is not empty
+            if availability:
+                station_availability = {
+                    "name": availability[0][0],
+                    "available_bikes": availability[0][2],
+                    "available_stands": availability[0][1],
+                    "status": availability[0][3]
+                }
+            # Add the station availability dictionary to the current_availability dictionary with the station name as the key
+            current_availability[station["name"]] = station_availability
+        
+        return render_template('dashboard.html', weather=weather, bikes=bikes, stations=stations, current_availability=json.dumps(current_availability))
     return redirect(url_for('index'))
 
 @app.before_request

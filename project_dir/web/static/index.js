@@ -1,8 +1,3 @@
-var temperature = document.getElementById("temperature");
-var description = document.getElementById("description");
-var wind = document.getElementById("wind");
-var date = document.getElementById("date");
-
 var stationInfo = {
   availableBikes: document.getElementById("available-bikes"),
   status: document.getElementById("status"),

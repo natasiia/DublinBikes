@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 * {
   padding: 0;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -15,6 +15,13 @@ body {
 #map {
   height: 77vh;
   width: 100%;
+}
+
+#weather_icon {
+  min-width: 300px;
+  max-width: 500px;
+  display: block;
+  align-content: center;
 }
 
 .container {
@@ -44,12 +51,10 @@ body {
   background: none;
   height: 30px;
   color: rgb(0, 0, 0);
-  font-weight: bolder;
 }
 
 ::placeholder {
   color: rgb(0, 0, 0);
-  font-weight: bolder;
 }
 
 .card-container {
@@ -69,18 +74,27 @@ body {
 }
 
 .weather-container {
-  width: 40%;
+  width: 35%;
+  max-width: 300px;
   height: fit-content;
   margin-right: 2%;
-}
-
-.image {
-  max-width: 100px;
 }
 
 .weather-info {
   padding: 15px;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.weather-main {
+  display: block;
+}
+
+.weather-main p {
+  padding: 10px;
 }
 
 .frosted-glass {

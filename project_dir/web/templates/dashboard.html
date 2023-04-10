@@ -13,26 +13,32 @@
     />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script type="module" src="./static/index.js"></script>
+    <script type="module" src="./static/weather.js"></script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEXSmH1FRzN_xwWqpJ1r44oFO87LmTXtM&callback=initMap"
       async
       defer
     ></script>
-    <title>Dublin Bikes</title>
+    <title>Dublin Cycle</title>
+
+    <link rel="icon" type="image/svg+xml" href="../static/images/bicycle.svg" />
   </head>
   <body>
     <div class="container">
       <div class="weather-container">
         <div class="weather-info frosted-glass">
-          <h2>Weather</h2>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/263/263883.png"
-            alt=""
-            class="image"
-          />
-          <p id="temperature"></p>
-          <p id="description"></p>
-          <p id="wind">4.1</p>
+          <h2>Hello!</h2>
+          <br />
+          <h3>Ready for a ride today?</h3>
+          <img id="weather_icon" />
+          <div class="weather-main">
+            <p>Temperature: <span id="temperature"></span>°C</p>
+            <p>Feels like: <span id="temp_feels_like"></span>°C</p>
+            <p>Pressure: <span id="pressure"></span> hPa</p>
+            <p>Humidity: <span id="humidity"></span>%</p>
+            <p>Visibility: <span id="visibility"></span></p>
+            <p>Speed of wind: <span id="wind_speed"></span> m/s</p>
+          </div>
         </div>
       </div>
       <div class="cards-map">

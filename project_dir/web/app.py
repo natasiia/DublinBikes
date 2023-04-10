@@ -1,5 +1,6 @@
 import json
-
+from flask_caching import Cache
+import concurrent.futures
 from flask import Flask, session, url_for, request, render_template, redirect, g
 import os
 import dbContext
@@ -7,6 +8,7 @@ import utils
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.urandom(24)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -55,30 +57,26 @@ def search_station():
 
 
 @app.route('/dashboard')
+@cache.cached(timeout=300)  # Cache the page for 5 minutes
 def dashboard():
     if g.user:
-        stations = json.dumps(dbContext.get_station_data())
-        bikes = dbContext.get_availability_data()
-        weather = dbContext.get_weather_data()
-        stations_current = dbContext.get_station_data()
-        current_availability = {}
-        
-        # Loop through each station
-        for station in stations_current:
-            # Get the most recent availability data for this station
-            availability = dbContext.get_station(station["name"])
-            # Create a dictionary with the station name, available bikes, and available stands
-            # Make sure availability is not empty
-            if availability:
-                station_availability = {
-                    "name": availability[0][0],
-                    "available_bikes": availability[0][2],
-                    "available_stands": availability[0][1],
-                    "status": availability[0][3]
-                }
-            # Add the station availability dictionary to the current_availability dictionary with the station name as the key
-            current_availability[station["name"]] = station_availability
-        
+        stations = None
+        bikes = None
+        weather = None
+        current_availability = None
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            # Retrieve the data using multiple threads
+            station_data_future = executor.submit(dbContext.get_station_data)
+            availability_data_future = executor.submit(dbContext.get_availability_data)
+            weather_data_future = executor.submit(dbContext.get_weather_data)
+            current_availability_future = executor.submit(dbContext.get_stations_availability)
+
+            # Get the results from the futures
+            stations = station_data_future.result()
+            bikes = availability_data_future.result()
+            weather = weather_data_future.result()
+            current_availability = current_availability_future.result()
+
         return render_template('dashboard.html', weather=weather, bikes=bikes, stations=stations, current_availability=json.dumps(current_availability))
     return redirect(url_for('index'))
 

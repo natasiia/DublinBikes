@@ -41,16 +41,14 @@ function initMap() {
   const infoWindow = new google.maps.InfoWindow();
 
   stations.forEach((station, index) => {
-    let current_station_av = current_availability[station.name];
-
     const marker = new google.maps.Marker({
       position: { lat: station.position_lat, lng: station.position_lng },
       label: (index + 1).toString(),
       map: map,
       title: station.name,
-      description: current_station_av.available_bikes,
-      description2: current_station_av.available_stands,
-      status: current_station_av.status,
+      description: current_availability[station.name].available_bikes,
+      description2: current_availability[station.name].available_stands,
+      status: current_availability[station.name].status,
       optimized: false,
     });
 

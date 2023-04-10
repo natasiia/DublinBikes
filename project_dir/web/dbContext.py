@@ -154,3 +154,48 @@ def get_availability_data():
     db_connection.close()
     # return availability data
     return json.dumps(availability)
+
+def get_stations_availability():
+    """
+    Retrieve the most recent availability data for all stations.
+
+    Returns:
+        A dictionary of station names to availability data.
+    """
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Map station names to numbers
+    cur.execute("SELECT name, number FROM station")
+    name_to_number = dict(cur.fetchall())
+
+    # Get latest availability data for each station
+    cur.execute('''
+        SELECT s.name, a1.available_bike_stands, a1.available_bikes, a1.status
+        FROM station s
+        INNER JOIN (
+            SELECT number, MAX(last_update) AS last_update
+            FROM availability
+            GROUP BY number
+        ) latest_availability
+        ON s.number = latest_availability.number
+        INNER JOIN availability a1 ON a1.number = s.number AND a1.last_update = latest_availability.last_update;
+    ''')
+    results = cur.fetchall()
+
+    # Create availability dictionary, checking if station exists in name_to_number mapping
+    current_availability = {}
+    for station in results:
+        station_name = station[0]
+        if station_name in name_to_number:
+            number = name_to_number[station_name]
+            current_availability[station_name] = {
+                "available_stands": station[1],
+                "available_bikes": station[2],
+                "status": station[3]
+            }
+        else:
+            print(f"Skipping row for unknown station name: {station_name}")
+
+    conn.close()
+    return current_availability

@@ -57,7 +57,7 @@ function initMap() {
     // Add a click listener for each marker, and set up the info window.
     marker.addListener("click", () => {
       infoWindow.close();
-      let content = marker.getTitle();
+      let content = "<strong>" + marker.getTitle() + "</strong>";
       content += "<br>Available Bikes: " + marker.description;
 
       content += "<br>Available Stands: " + marker.description2;

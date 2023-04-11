@@ -30,6 +30,24 @@
           <h2>Hello!</h2>
           <br />
           <h3>Ready for a ride today?</h3>
+          <div class="address-from">
+            <label for="from-address">From:</label>
+            <input
+              type="text"
+              id="from-address"
+              name="from-address"
+              placeholder="Enter a starting address"
+            />
+          </div>
+          <div class="address-to">
+            <label for="to-address">To:</label>
+            <input
+              type="text"
+              id="to-address"
+              name="to-address"
+              placeholder="Enter a destination address"
+            />
+          </div>
           <img id="weather_icon" />
           <div class="weather-main">
             <p>Temperature: <span id="temperature"></span>°C</p>
@@ -81,6 +99,7 @@
           </div>
         </div>
 
+        <button id="toggleMarkers">Hide Markers</button>
         <div id="map"></div>
       </div>
     </div>

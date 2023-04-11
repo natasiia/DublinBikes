@@ -13,7 +13,7 @@ body {
 }
 
 #map {
-  height: 77vh;
+  height: 70vh;
   width: 100%;
 }
 
@@ -22,6 +22,28 @@ body {
   max-width: 500px;
   display: block;
   align-content: center;
+}
+
+#toggleMarkers {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+  transition: .5s;
+}
+
+#toggleMarkers:hover {
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px;
 }
 
 .container {

@@ -52,10 +52,10 @@ const weatherMap = {
   squalls: "static/images/weather_icons/windy.svg",
   tornado: "static/images/weather_icons/windy-2.svg",
   "clear sky": "static/images/weather_icons/day.svg",
-  "few clouds: 11-25%": "static/images/weather_icons/cloudy-day-1.svg",
-  "scattered clouds: 25-50%": "static/images/weather_icons/cloudy-day-2.svg",
-  "broken clouds: 51-84%": "static/images/weather_icons/cloudy-day-3.svg",
-  "overcast clouds: 85-100%": "static/images/weather_icons/cloudy-day-4.svg",
+  "few clouds": "static/images/weather_icons/cloudy-day-1.svg",
+  "scattered clouds": "static/images/weather_icons/cloudy-day-2.svg",
+  "broken clouds": "static/images/weather_icons/cloudy-day-3.svg",
+  "overcast clouds": "static/images/weather_icons/cloudy-day-4.svg",
 };
 
 let temperature = document.querySelector("#temperature");

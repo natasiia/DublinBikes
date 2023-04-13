@@ -87,9 +87,12 @@ def get_station(name):
     """Retrieves station data from the database"""
 
      # STATEMENT TO SELECT ALL DATA
-    select_station = "SELECT s.name, a.available_bike_stands, a.available_bikes, a.status FROM dbbikes.availability a " \
-                     "INNER JOIN dbbikes.station s ON a.number = s.number WHERE s.name LIKE %s ORDER BY " \
-                     "a.last_update LIMIT 1"
+    select_station = "SELECT s.name, a.available_bike_stands, a.available_bikes, a.status " \
+                 "FROM dbbikes.station s " \
+                 "INNER JOIN dbbikes.availability a ON a.number = s.number " \
+                 "WHERE s.name LIKE %s " \
+                 "ORDER BY a.last_update DESC " \
+                 "LIMIT 1"
 
     # Connection String
     cursor = db_connection.cursor()

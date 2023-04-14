@@ -24,7 +24,8 @@ body {
   align-content: center;
 }
 
-#toggleMarkers {
+#toggleMarkers,
+#toggleHeatmap {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -42,7 +43,8 @@ body {
   transition: .5s;
 }
 
-#toggleMarkers:hover {
+#toggleMarkers:hover,
+#toggleHeatmap:hover {
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px;
 }
 

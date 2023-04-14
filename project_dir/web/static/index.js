@@ -123,6 +123,21 @@ function initMap() {
     radius: 10,
   });
 
+  const toggleHeatmapButton = document.getElementById("toggleHeatmap");
+  let heatmapVisible = true;
+
+  toggleHeatmapButton.addEventListener("click", () => {
+    if (heatmapVisible) {
+      heatmap.setMap(null);
+      heatmapVisible = false;
+      toggleHeatmapButton.innerText = "Show Heatmap";
+    } else {
+      heatmap.setMap(map);
+      heatmapVisible = true;
+      toggleHeatmapButton.innerText = "Hide Heatmap";
+    }
+  });
+
   heatmap.setMap(map);
 }
 

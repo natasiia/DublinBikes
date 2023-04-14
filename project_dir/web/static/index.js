@@ -139,6 +139,39 @@ function initMap() {
   });
 
   heatmap.setMap(map);
+
+  const showLocationButton = document.getElementById("showLocation");
+  let marker;
+
+  if (navigator.geolocation) {
+    showLocationButton.addEventListener("click", () => {
+      if (marker) {
+        marker.setMap(null);
+        marker = null;
+        showLocationButton.textContent = "Show Location";
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const location = new google.maps.LatLng(latitude, longitude);
+            map.setCenter(location);
+            map.setZoom(13);
+            marker = new google.maps.Marker({
+              position: location,
+              map: map,
+            });
+            showLocationButton.textContent = "Hide Location";
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      }
+    });
+  } else {
+    showLocationButton.disabled = true;
+    console.error("Geolocation is not supported by this browser.");
+  }
 }
 
 // Call the initMap function after the Google Maps API has loaded

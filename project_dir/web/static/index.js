@@ -39,10 +39,15 @@ function initMap() {
 
   const markers = [];
 
-  stations.forEach((station, index) => {
+  const svgIcon = {
+    url: "./static/images/bicycle.svg",
+    scaledSize: new google.maps.Size(20, 20),
+  };
+
+  stations.forEach((station) => {
     const marker = new google.maps.Marker({
       position: { lat: station.position_lat, lng: station.position_lng },
-      label: (index + 1).toString(),
+      icon: svgIcon,
       map: map,
       title: station.name,
       description: current_availability[station.name]
@@ -51,7 +56,6 @@ function initMap() {
       description2: current_availability[station.name]
         ? current_availability[station.name].available_stands
         : "unknown",
-      status: current_availability[station.name].status,
       optimized: false,
     });
 
@@ -63,7 +67,6 @@ function initMap() {
       let content = "<strong>" + marker.getTitle() + "</strong>";
       content += "<br>Available Bikes: " + marker.description;
       content += "<br>Available Stands: " + marker.description2;
-      content += "<br>Status: " + marker.status;
 
       infoWindow.setContent(content);
       infoWindow.open(marker.getMap(), marker);
@@ -82,6 +85,45 @@ function initMap() {
         : "Show Markers";
     });
   });
+
+  let heatmapData = stations.map((station) => {
+    if (current_availability[station.name] !== undefined) {
+      console.log(station.name);
+      let weight;
+      if (current_availability[station.name].available_bikes == 0) {
+        weight = 1;
+      } else if (
+        current_availability[station.name].available_bikes > 0 &&
+        current_availability[station.name].available_bikes < 10
+      ) {
+        weight = 1.5;
+      } else {
+        weight = 2;
+      }
+
+      console.log(weight);
+      return {
+        location: new google.maps.LatLng(
+          station.position_lat,
+          station.position_lng
+        ),
+        weight,
+      };
+    }
+  });
+
+  const heatmap = new google.maps.visualization.HeatmapLayer({
+    data: heatmapData,
+    gradient: [
+      "rgba(255, 255, 255, 0)", // transparent
+      "rgba(255, 0, 0, 1)", // red
+      "rgba(255, 255, 0, 1)", // yellow
+      "rgba(0,128,0,1)", // green
+    ],
+    radius: 10,
+  });
+
+  heatmap.setMap(map);
 }
 
 // Call the initMap function after the Google Maps API has loaded

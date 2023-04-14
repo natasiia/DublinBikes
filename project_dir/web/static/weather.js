@@ -1,5 +1,7 @@
 //icons are taken from https://www.amcharts.com/free-animated-svg-weather-icons/
 
+const apiKey = "287a64521ea9136de147467072dc8ccb";
+
 const weatherMap = {
   "thunderstorm with light rain": "static/images/weather_icons/thunder.svg",
   "thunderstorm with rain": "static/images/weather_icons/thunder.svg",
@@ -58,29 +60,38 @@ const weatherMap = {
   "overcast clouds": "static/images/weather_icons/cloudy-day-4.svg",
 };
 
-let temperature = document.querySelector("#temperature");
-let temp_feels_like = document.querySelector("#temp_feels_like");
-let pressure = document.querySelector("#pressure");
-let humidity = document.querySelector("#humidity");
-let visibility = document.querySelector("#visibility");
-let wind_speed = document.querySelector("#wind_speed");
-
-temperature.innerHTML = (weather[0].temperature - 273.15).toFixed(0);
-temp_feels_like.innerHTML = (weather[0].temp_feels_like - 273.15).toFixed(0);
-pressure.innerHTML = weather[0].pressure;
-humidity.innerHTML = weather[0].humidity;
-visibility.innerHTML = weather[0].visibility;
-wind_speed.innerHTML = weather[0].wind_speed;
+const temperature = document.querySelector("#temperature");
+const temp_feels_like = document.querySelector("#temp_feels_like");
+const pressure = document.querySelector("#pressure");
+const humidity = document.querySelector("#humidity");
+const visibility = document.querySelector("#visibility");
+const wind_speed = document.querySelector("#wind_speed");
 
 const weatherImg = document.querySelector("#weather_icon");
 
-function updateWeather(weather) {
-  const imgSrc = weatherMap[weather.toLowerCase()];
-  if (imgSrc) {
-    weatherImg.src = imgSrc;
-  } else {
-    console.error(`Invalid weather value: ${weather}`);
-  }
+function updateWeather() {
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=Dublin,IE&appid=${apiKey}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      temperature.innerHTML = (data.main.temp - 273.15).toFixed(0);
+      temp_feels_like.innerHTML = (data.main.feels_like - 273.15).toFixed(0);
+      pressure.innerHTML = data.main.pressure;
+      humidity.innerHTML = data.main.humidity;
+      visibility.innerHTML = data.visibility;
+      wind_speed.innerHTML = data.wind.speed;
+
+      const imgSrc = weatherMap[data.weather[0].description.toLowerCase()];
+      if (imgSrc) {
+        weatherImg.src = imgSrc;
+      } else {
+        console.error(`Invalid weather value: ${data.weather[0].description}`);
+      }
+    })
+    .catch((error) => {
+      console.error(`Error fetching weather data: ${error}`);
+    });
 }
 
-updateWeather(weather[0].weather_description);
+updateWeather();

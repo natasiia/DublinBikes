@@ -15,6 +15,8 @@
       href="{{ url_for('static',filename='styles/login.css') }}"
     />
     <title>Login</title>
+
+    <link rel="icon" type="image/svg+xml" href="../static/images/bicycle.svg" />
   </head>
   <body>
     <div class="login-container">
@@ -33,6 +35,34 @@
         <button type="submit">Login</button>
         <a href="{{ url_for('register') }}">Need an account?</a>
       </form>
+    </div>
+
+    <div class="instructions">
+      <div class="inst-rows">
+        <p>Locate</p>
+        <p>Unlock</p>
+        <p>Ride</p>
+      </div>
+      <div class="inst-img">
+        <div id="locate">
+          <img
+            src="../static/images/login_icons/locate.svg"
+            alt="Bike and Map"
+          />
+        </div>
+        <div id="unlock">
+          <img
+            src="../static/images/login_icons/unlock.svg"
+            alt="Hand and Bike"
+          />
+        </div>
+        <div id="ride">
+          <img
+            src="../static/images/login_icons/ride.svg"
+            alt="Hand and Bike"
+          />
+        </div>
+      </div>
     </div>
     {% if from_register_page is defined %}
 

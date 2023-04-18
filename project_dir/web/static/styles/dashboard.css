@@ -17,9 +17,14 @@ body {
   width: 100%;
 }
 
+/* width: 35%;
+max-width: 300px;
+height: fit-content;
+margin-left: 2%;
+} */
+
 #weather_icon {
   min-width: 300px;
-  max-width: 500px;
   display: block;
   align-content: center;
 }
@@ -145,31 +150,29 @@ body {
 .frosted-glass:hover {
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px;
 }
-width: 35%;
-max-width: 300px;
-height: fit-content;
-margin-left: 2%;
-}
 
 .weather-container-right {
-width: 35%;
-max-width: 300px;
-height: fit-content;
-margin-left: 2%;
+  width: 35%;
+  max-width: 300px;
+  height: fit-content;
+  margin-left: 2%;
 }
 
-.weather-container-right input,select, .submit-prediction{
-width: 100%;
-outline: none;
-border: none;
-background: none;
-height: 30px;
-color: rgb(0, 0, 0);
-border:white 1px solid;
-border-radius:10px;
-margin-bottom:10px;
-cursor: pointer;
+.weather-container-right input,
+select,
+.submit-prediction {
+  width: 100%;
+  outline: none;
+  border: none;
+  background: none;
+  height: 30px;
+  color: rgb(0, 0, 0);
+  border: white 1px solid;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
-.icon{
-font-size:100pt;
+
+.icon {
+  font-size: 100pt;
 }

@@ -1,3 +1,4 @@
+import datetime
 import json
 from flask_caching import Cache
 import concurrent.futures
@@ -5,10 +6,67 @@ from flask import Flask, session, url_for, request, render_template, redirect, g
 import os
 import dbContext
 import utils
+import pickle
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = os.urandom(24)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+
+# Load the trained ML pickle file
+monday = pickle.load(open('./static/pickle_files/monday_station.pkl', 'rb'))
+tuesday = pickle.load(open("./static/pickle_files/tuesday_station.pkl", "rb"))
+wednesday = pickle.load(open("./static/pickle_files/wednesday_station.pkl", "rb"))
+thursday = pickle.load(open("./static/pickle_files/thursday_station.pkl", "rb"))
+friday = pickle.load(open("./static/pickle_files/friday_station.pkl", "rb"))
+saturday = pickle.load(open("./static/pickle_files/saturday_station.pkl", "rb"))
+sunday = pickle.load(open("./static/pickle_files/sunday_station.pkl", "rb"))
+
+
+# router to the prediction service
+@app.route("/prediction", methods=['GET', 'POST'])
+def prediction_model():
+    import numpy as np
+
+    # Store the request from JS
+    data = request.args.get('post', 0, type=str)
+    print(data)
+    data = data.split()
+    temperature = float(data[0])
+    pressure = int(data[1])
+    humidity = int(data[2])
+    wind_speed = float(data[3])
+    date = (data[4])
+    d = datetime.datetime.strptime(date, "%Y-%m-%d")
+    date = d.strftime("%A")
+    minute = (data[5])
+    station = int(data[6])
+    d = datetime.datetime.strptime(minute, "%H:%M")
+    hours = int(d.hour)
+    minute = int(d.minute)
+
+    print("Data to be sent to the prediction model ", data)
+    print(type(data))
+    prediction_input = [[station, temperature, pressure, humidity, wind_speed, hours, minute]]
+    if date == "Monday":
+        x = monday.predict(prediction_input)
+    elif date == "Tuesday":
+        x = tuesday.predict(prediction_input)
+    elif date == "Wednesday":
+        x = wednesday.predict(prediction_input)
+    elif date == "Thursday":
+        x = thursday.predict(prediction_input)
+    elif date == "Friday":
+        x = friday.predict(prediction_input)
+    elif date == "Saturday":
+        x = saturday.predict(prediction_input)
+    elif date == "Sunday":
+        x = sunday.predict(prediction_input)
+
+    print("Predicted available bikes for selected station is", int(x[0]))
+
+    # Fetch the ML model output and return as JSON to client
+    prediction = [int(x[0])]
+    return json.dumps(prediction)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -42,6 +100,7 @@ def register():
         else:
             return render_template('register.html', errors=results[1])
     return render_template('register.html')
+
 
 @app.route('/searchStation', methods=['GET'])
 def search_station():
@@ -77,8 +136,10 @@ def dashboard():
             weather = weather_data_future.result()
             current_availability = current_availability_future.result()
 
-        return render_template('dashboard.html', weather=weather, bikes=bikes, stations=stations, current_availability=json.dumps(current_availability))
+        return render_template('dashboard.html', weather=weather, bikes=bikes, stations=stations,
+                               current_availability=json.dumps(current_availability))
     return redirect(url_for('index'))
+
 
 @app.before_request
 def before_request():
@@ -86,9 +147,11 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
+
 @app.template_filter("tojson")
 def tojson_filter(value):
     return json.dumps(value)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -17,21 +17,16 @@ body {
   width: 100%;
 }
 
-/* width: 35%;
-max-width: 300px;
-height: fit-content;
-margin-left: 2%;
-} */
-
 #weather_icon {
-  min-width: 300px;
+  min-width: 200px;
   display: block;
   align-content: center;
 }
 
 #toggleMarkers,
 #toggleHeatmap,
-#showLocation {
+#showLocation,
+#buildRoute {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -56,11 +51,26 @@ margin-left: 2%;
   margin-left: 0;
 }
 
+#buildRoute {
+  float: none;
+  display: block;
+  margin: 10px auto;
+}
 
 #toggleMarkers:hover,
 #toggleHeatmap:hover,
-#showLocation:hover {
+#showLocation:hover,
+#buildRoute:hover {
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px;
+}
+
+#route {
+  max-width: 90%;
+}
+
+#station-select,
+#station-dest {
+  width: 100%;
 }
 
 .container {
@@ -131,10 +141,11 @@ margin-left: 2%;
 
 .weather-main {
   display: block;
+  font-weight: 700;
 }
 
 .weather-main p {
-  padding: 10px;
+  padding: 3px;
 }
 
 .frosted-glass {

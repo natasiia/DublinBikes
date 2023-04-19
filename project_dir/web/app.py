@@ -15,10 +15,13 @@ cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 # Load the trained ML pickle file
 monday = pickle.load(open('./static/pickle_files/monday_station.pkl', 'rb'))
 tuesday = pickle.load(open("./static/pickle_files/tuesday_station.pkl", "rb"))
-wednesday = pickle.load(open("./static/pickle_files/wednesday_station.pkl", "rb"))
-thursday = pickle.load(open("./static/pickle_files/thursday_station.pkl", "rb"))
+wednesday = pickle.load(
+    open("./static/pickle_files/wednesday_station.pkl", "rb"))
+thursday = pickle.load(
+    open("./static/pickle_files/thursday_station.pkl", "rb"))
 friday = pickle.load(open("./static/pickle_files/friday_station.pkl", "rb"))
-saturday = pickle.load(open("./static/pickle_files/saturday_station.pkl", "rb"))
+saturday = pickle.load(
+    open("./static/pickle_files/saturday_station.pkl", "rb"))
 sunday = pickle.load(open("./static/pickle_files/sunday_station.pkl", "rb"))
 
 
@@ -46,7 +49,8 @@ def prediction_model():
 
     print("Data to be sent to the prediction model ", data)
     print(type(data))
-    prediction_input = [[station, temperature, pressure, humidity, wind_speed, hours, minute]]
+    prediction_input = [[station, temperature,
+                         pressure, humidity, wind_speed, hours, minute]]
     if date == "Monday":
         x = monday.predict(prediction_input)
     elif date == "Tuesday":
@@ -126,9 +130,11 @@ def dashboard():
         with concurrent.futures.ThreadPoolExecutor() as executor:
             # Retrieve the data using multiple threads
             station_data_future = executor.submit(dbContext.get_station_data)
-            availability_data_future = executor.submit(dbContext.get_availability_data)
+            availability_data_future = executor.submit(
+                dbContext.get_availability_data)
             weather_data_future = executor.submit(dbContext.get_weather_data)
-            current_availability_future = executor.submit(dbContext.get_stations_availability)
+            current_availability_future = executor.submit(
+                dbContext.get_stations_availability)
 
             # Get the results from the futures
             stations = station_data_future.result()

@@ -30,23 +30,21 @@
           <h2>Hello!</h2>
           <br />
           <h3>Ready for a ride today?</h3>
-          <div class="address-from">
-            <label for="from-address">From:</label>
-            <input
-              type="text"
-              id="from-address"
-              name="from-address"
-              placeholder="Enter a starting address"
-            />
-          </div>
-          <div class="address-to">
-            <label for="to-address">To:</label>
-            <input
-              type="text"
-              id="to-address"
-              name="to-address"
-              placeholder="Enter a destination address"
-            />
+          <br />
+          <div id="route">
+            <h4>Build your trip:</h4>
+            <br />
+            <label for="station-select">Select starting position:</label>
+
+            <select name="stations" id="station-select">
+              <option>Please choose an option</option>
+            </select>
+
+            <label for="station-dest">Select ending position:</label>
+            <select name="station-dest" id="station-dest">
+              <option>Please choose an option</option>
+            </select>
+            <button id="buildRoute">Go!</button>
           </div>
           <img id="weather_icon" />
           <div class="weather-main">
@@ -104,16 +102,25 @@
       </div>
       <div class="weather-container-right">
         <div class="weather-info frosted-glass">
-            <h1>Get <span>Prediction</span></h1>
-            <form id="prediction_form" onsubmit="return false">
-                <label for="from_places">Station</label>
-                <select class="form-control" id="from_places" value="select"> </select>
-                <label for="dateInput">Date</label>
-                <input type="date" id="dateInput" />
-                <label for="timeInput">Time</label>
-                <input type="time" id="timeInput" />
-                <input class="btn btn-primary" id="submitPrediction" type="submit" value="Go">
-            </form>
+          <h1>Get <span>Prediction</span></h1>
+          <form id="prediction_form" onsubmit="return false">
+            <label for="from_places">Station</label>
+            <select
+              class="form-control"
+              id="from_places"
+              value="select"
+            ></select>
+            <label for="dateInput">Date</label>
+            <input type="date" id="dateInput" />
+            <label for="timeInput">Time</label>
+            <input type="time" id="timeInput" />
+            <input
+              class="btn btn-primary"
+              id="submitPrediction"
+              type="submit"
+              value="Go"
+            />
+          </form>
           <p class="icon">🚴‍♀️</p>
           <p>Predicted Available Bikes: <span id="predictionResults"></span></p>
         </div>

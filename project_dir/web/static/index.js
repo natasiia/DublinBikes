@@ -88,7 +88,6 @@ function initMap() {
 
   let heatmapData = stations.map((station) => {
     if (current_availability[station.name] !== undefined) {
-      console.log(station.name);
       let weight;
       if (current_availability[station.name].available_bikes == 0) {
         weight = 1;
@@ -101,7 +100,6 @@ function initMap() {
         weight = 2;
       }
 
-      console.log(weight);
       return {
         location: new google.maps.LatLng(
           station.position_lat,
@@ -172,6 +170,98 @@ function initMap() {
     showLocationButton.disabled = true;
     console.error("Geolocation is not supported by this browser.");
   }
+
+  let stations_holder = document.getElementById("station-select");
+  let stations_final = document.getElementById("station-dest");
+  let buildRouteBtn = document.getElementById("buildRoute");
+
+  stations_holder.innerHTML += "<option>Current location</option>";
+
+  stations.forEach((station) => {
+    stations_holder.innerHTML += "<option>" + station.name + "</option>";
+    stations_final.innerHTML += "<option>" + station.name + "</option>";
+  });
+
+  let directionsRenderer;
+
+  // set up the event listener for the button
+  buildRouteBtn.addEventListener("click", () => {
+    // delete the old route, if it exists
+    if (directionsRenderer) {
+      directionsRenderer.setMap(null);
+    }
+    // get the selected options from the dropdowns
+    const startValue = stations_holder.value;
+    const endValue = stations_final.value;
+
+    let startPoint;
+    if (startValue == "Current location") {
+      // get the user's current location
+      navigator.geolocation.getCurrentPosition((position) => {
+        startPoint = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+      });
+    }
+    let start_index;
+    let end_index;
+
+    for (let i = 0; i < stations.length; i++) {
+      if (startValue == stations[i].name) {
+        start_index = i;
+      }
+      if (endValue == stations[i].name) {
+        end_index = i;
+      }
+    }
+
+    // check if both dropdowns have a value selected
+    if (startValue && endValue) {
+      // get the latitude and longitude for the start and end points
+      let startPoint;
+      if (startValue !== "Current location") {
+        startPoint = {
+          lat: stations[start_index].position_lat,
+          lng: stations[start_index].position_lng,
+        };
+      }
+      const endPoint = {
+        lat: stations[end_index].position_lat,
+        lng: stations[end_index].position_lng,
+      };
+
+      // create a new DirectionsService object
+      const directionsService = new google.maps.DirectionsService();
+
+      // set up the request for the directions
+      const request = {
+        origin: startPoint,
+        destination: endPoint,
+        travelMode: google.maps.TravelMode.BICYCLING,
+      };
+
+      // use the DirectionsService to get the route and display it on the map
+      directionsService.route(request, (result, status) => {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsRenderer = new google.maps.DirectionsRenderer();
+          directionsRenderer.setDirections(result);
+          directionsRenderer.setMap(map);
+
+          // zoom in on the route
+          const bounds = new google.maps.LatLngBounds();
+          result.routes[0].legs.forEach((leg) => {
+            bounds.extend(leg.start_location);
+            bounds.extend(leg.end_location);
+          });
+          map.fitBounds(bounds);
+        } else {
+          console.error("Error fetching directions:", result);
+          alert("Error fetching directions");
+        }
+      });
+    }
+  });
 }
 
 // Call the initMap function after the Google Maps API has loaded

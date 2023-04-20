@@ -1,4 +1,5 @@
 //icons are taken from https://www.amcharts.com/free-animated-svg-weather-icons/
+// <a href="https://www.flaticon.com/free-icons/drop" title="drop icons">Drop icons created by Pixel perfect - Flaticon</a>
 
 const apiKey = "287a64521ea9136de147467072dc8ccb";
 
@@ -61,13 +62,48 @@ const weatherMap = {
 };
 
 const temperature = document.querySelector("#temperature");
-const temp_feels_like = document.querySelector("#temp_feels_like");
+const weather_desc = document.querySelector("#weather_desc");
 const pressure = document.querySelector("#pressure");
 const humidity = document.querySelector("#humidity");
-const visibility = document.querySelector("#visibility");
 const wind_speed = document.querySelector("#wind_speed");
+const visible_date = document.querySelector("#visible_date");
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+const date = new Date();
+let day = date.getDate();
+let month = months[date.getMonth()];
+let day_week = days[date.getDay()];
+
+visible_date.innerHTML = `${day_week}, ${day} ${month}`;
 
 const weatherImg = document.querySelector("#weather_icon");
+
+function capitalizeString(string) {
+  return string.toLowerCase().replace(/(?:^|\s)\S/g, function (word) {
+    return word.toUpperCase();
+  });
+}
 
 function updateWeather() {
   fetch(
@@ -76,11 +112,10 @@ function updateWeather() {
     .then((response) => response.json())
     .then((data) => {
       temperature.innerHTML = (data.main.temp - 273.15).toFixed(0);
-      temp_feels_like.innerHTML = (data.main.feels_like - 273.15).toFixed(0);
+      weather_desc.innerHTML = capitalizeString(data.weather[0].description);
+      wind_speed.innerHTML = (data.wind.speed * 3.6).toFixed(1);
       pressure.innerHTML = data.main.pressure;
       humidity.innerHTML = data.main.humidity;
-      visibility.innerHTML = data.visibility;
-      wind_speed.innerHTML = data.wind.speed;
 
       const imgSrc = weatherMap[data.weather[0].description.toLowerCase()];
       if (imgSrc) {

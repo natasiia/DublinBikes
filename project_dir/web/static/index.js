@@ -4,43 +4,39 @@ var stationInfo = {
   station: document.getElementById("station"),
   availableStands: document.getElementById("available-stands"),
 };
-const markers = []
+const markers = [];
 
-
-function getStationStats(name){
-
-//    $.ajax({
-//      url: "/searchStation?name=" + name,
-//      cache: false,
-//      type: "GET",
-//      error: function (xhr, status, error) {
-//        $("#search-bar").notify(xhr.responseText, "error");
-//      },
-
-
-//      success: function (results) {
-//        stationDataCache[name] = {
-//            data:JSON.parse(results),
-//            timestamp:Date.now()
-//        }
-//        let data = JSON.parse(results);
-//        stationInfo.station.innerHTML = data[0];
-//        stationInfo.availableStands.innerHTML = data[1];
-//        stationInfo.availableBikes.innerHTML = data[2];
-//        stationInfo.status.innerHTML = data[3];
-//        markers[name];
-//      },
-//    });
+function getStationStats(name) {
+  //    $.ajax({
+  //      url: "/searchStation?name=" + name,
+  //      cache: false,
+  //      type: "GET",
+  //      error: function (xhr, status, error) {
+  //        $("#search-bar").notify(xhr.responseText, "error");
+  //      },
+  //      success: function (results) {
+  //        stationDataCache[name] = {
+  //            data:JSON.parse(results),
+  //            timestamp:Date.now()
+  //        }
+  //        let data = JSON.parse(results);
+  //        stationInfo.station.innerHTML = data[0];
+  //        stationInfo.availableStands.innerHTML = data[1];
+  //        stationInfo.availableBikes.innerHTML = data[2];
+  //        stationInfo.status.innerHTML = data[3];
+  //        markers[name];
+  //      },
+  //    });
 }
 
-function getStationNameFromNumber(number){
-    var name = ''
-     stations.forEach(item =>{
-        if(item.number == number){
-            name =  item.name;
-        }
-     });
-     return name;
+function getStationNameFromNumber(number) {
+  var name = "";
+  stations.forEach((item) => {
+    if (item.number == number) {
+      name = item.name;
+    }
+  });
+  return name;
 }
 
 function initMap() {
@@ -56,15 +52,20 @@ function initMap() {
     url: "./static/images/bicycle.svg",
     scaledSize: new google.maps.Size(20, 20),
   };
+
+  // Iterate through each station in the stations array.
   stations.forEach((station) => {
     const marker = new google.maps.Marker({
       position: { lat: station.position_lat, lng: station.position_lng },
       icon: svgIcon,
       map: map,
       title: station.name,
-      description: current_availability[station.name]? current_availability[station.name].available_bikes: "unknown",
-      description2: current_availability[station.name]? current_availability[station.name].available_stands: "unknown",
-      open: current_availability[station.name]? current_availability[station.name].status :"unkown",
+      description: current_availability[station.name]
+        ? current_availability[station.name].available_bikes
+        : "unknown",
+      description2: current_availability[station.name]
+        ? current_availability[station.name].available_stands
+        : "unknown",
       optimized: false,
     });
 
@@ -73,29 +74,34 @@ function initMap() {
     // Add a click listener for each marker, and set up the info window.
     marker.addListener("click", () => {
       infoWindow.close();
-      let content =''
-    if(marker,open ='OPEN'){
-         content = "<span class='open'>OPEN</span> <strong>" + marker.getTitle() + "</strong>  ";
-      }else{
-         content = "<span class='close'>CLOSE</span> <strong>" + marker.getTitle() + "</strong>  ";
+      let content = "";
+      if ((marker, (open = "OPEN"))) {
+        content =
+          "<span class='open'>OPEN</span> <strong>" +
+          marker.getTitle() +
+          "</strong>  ";
+      } else {
+        content =
+          "<span class='close'>CLOSE</span> <strong>" +
+          marker.getTitle() +
+          "</strong>  ";
       }
 
       content += "<br>Available Bikes: " + marker.description;
       content += "<br>Available Stands: " + marker.description2;
 
-
-
-      content += `<canvas id="chart" style="width:100%;max-width:700px"></canvas>`
+      content += `<canvas id="chart" style="width:100%;max-width:700px"></canvas>`;
       infoWindow.setContent(content);
       infoWindow.open(marker.getMap(), marker);
       const myPromise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                 const myChart = new Chart('chart', {
-                                  type: "bar",
-                                   data: [],
-                                   options: {}});
-            }, 100);
-        });
+        setTimeout(() => {
+          const myChart = new Chart("chart", {
+            type: "bar",
+            data: [],
+            options: {},
+          });
+        }, 100);
+      });
     });
 
     const toggleMarkersButton = document.getElementById("toggleMarkers");
@@ -216,7 +222,7 @@ function initMap() {
   stations_holder.innerHTML += "<option>CURRENT LOCATION</option>";
 
   stations.forEach((station) => {
-    stations_holder.innerHTML += "<option value='"+station.number+"'>" + station.name + "</option>";
+    stations_holder.innerHTML += "<option>" + station.name + "</option>";
     stations_final.innerHTML += "<option>" + station.name + "</option>";
   });
 
@@ -274,7 +280,9 @@ function initMap() {
       // use the DirectionsService to get the route and display it on the map
       directionsService.route(request, (result, status) => {
         if (status == google.maps.DirectionsStatus.OK) {
-          directionsRenderer = new google.maps.DirectionsRenderer();
+          directionsRenderer = new google.maps.DirectionsRenderer({
+            suppressBicyclingLayer: true,
+          });
           directionsRenderer.setDirections(result);
           directionsRenderer.setMap(map);
 
@@ -316,16 +324,16 @@ function initMap() {
       isDeletingRoute = true;
     }
   });
-    document.getElementById('search').addEventListener('change',(event)=>{
-    var stationName = getStationNameFromNumber(event.target.value)
-      markers.forEach(item=>{
-        if(item.title == stationName){
-              google.maps.event.trigger(item, 'click');
-               getStationStats(stationName);
-               document.getElementById('station-select').value=event.target.value
-        }
-      })
+  document.getElementById("search").addEventListener("change", (event) => {
+    var stationName = getStationNameFromNumber(event.target.value);
+    markers.forEach((item) => {
+      if (item.title == stationName) {
+        google.maps.event.trigger(item, "click");
+        getStationStats(stationName);
+        document.getElementById("station-select").value = event.target.value;
+      }
     });
+  });
 }
 
 // Call the initMap function after the Google Maps API has loaded

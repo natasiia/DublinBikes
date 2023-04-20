@@ -73,6 +73,19 @@ body {
   width: 100%;
 }
 
+.attributes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+.temperature {
+  font-size: 54px;
+  margin-top: -50px;
+}
+
 .container {
   display: flex;
   flex-direction: row;
@@ -137,6 +150,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-bottom: 10%;
 }
 
 .weather-main {
@@ -146,6 +160,10 @@ body {
 
 .weather-main p {
   padding: 3px;
+}
+
+.weather-info-3 {
+  text-align: center;
 }
 
 .frosted-glass {

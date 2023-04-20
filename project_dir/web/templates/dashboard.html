@@ -45,14 +45,27 @@
             <button id="buildRoute">Go!</button>
             <div id="duration"></div>
           </div>
+        </div>
+        <div class="weather-info frosted-glass weather-info-3">
           <img id="weather_icon" />
           <div class="weather-main">
-            <p>Temperature: <span id="temperature"></span>°C</p>
-            <p>Feels like: <span id="temp_feels_like"></span>°C</p>
-            <p>Pressure: <span id="pressure"></span> hPa</p>
-            <p>Humidity: <span id="humidity"></span>%</p>
-            <p>Visibility: <span id="visibility"></span></p>
-            <p>Speed of wind: <span id="wind_speed"></span> m/s</p>
+            <p class="temperature"><span id="temperature"></span>°</p>
+            <p id="weather_desc"></p>
+            <p id="visible_date"></p>
+            <div class="attributes">
+              <p>
+                <img src="../static/images/weather_icons/storm.png" />
+                <span id="wind_speed"></span> km/h
+              </p>
+              <p>
+                <img src="../static/images/weather_icons/raindrop.png" />
+                <span id="humidity"></span> %
+              </p>
+              <p>
+                <img src="../static/images/weather_icons/thermometer.png" />
+                <span id="pressure"></span> hPa
+              </p>
+            </div>
           </div>
         </div>
       </div>

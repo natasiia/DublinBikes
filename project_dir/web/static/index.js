@@ -45,45 +45,47 @@ function initMap() {
   };
 
   stations.forEach((station) => {
-    const marker = new google.maps.Marker({
-      position: { lat: station.position_lat, lng: station.position_lng },
-      icon: svgIcon,
-      map: map,
-      title: station.name,
-      description: current_availability[station.name]
-        ? current_availability[station.name].available_bikes
-        : "unknown",
-      description2: current_availability[station.name]
-        ? current_availability[station.name].available_stands
-        : "unknown",
-      optimized: false,
-    });
-
-    markers.push(marker);
-
-    // Add a click listener for each marker, and set up the info window.
-    marker.addListener("click", () => {
-      infoWindow.close();
-      let content = "<strong>" + marker.getTitle() + "</strong>";
-      content += "<br>Available Bikes: " + marker.description;
-      content += "<br>Available Stands: " + marker.description2;
-
-      infoWindow.setContent(content);
-      infoWindow.open(marker.getMap(), marker);
-    });
-
-    const toggleMarkersButton = document.getElementById("toggleMarkers");
-    let markersVisible = true;
-
-    toggleMarkersButton.addEventListener("click", () => {
-      markers.forEach((marker) => {
-        marker.setVisible(!markersVisible);
+    if (station.name !== "ORIEL STREET TEST TERMINAL") {
+      const marker = new google.maps.Marker({
+        position: { lat: station.position_lat, lng: station.position_lng },
+        icon: svgIcon,
+        map: map,
+        title: station.name,
+        description: current_availability[station.name]
+          ? current_availability[station.name].available_bikes
+          : "unknown",
+        description2: current_availability[station.name]
+          ? current_availability[station.name].available_stands
+          : "unknown",
+        optimized: false,
       });
-      markersVisible = !markersVisible;
-      toggleMarkersButton.innerText = markersVisible
-        ? "Hide Markers"
-        : "Show Markers";
-    });
+
+      markers.push(marker);
+
+      // Add a click listener for each marker, and set up the info window.
+      marker.addListener("click", () => {
+        infoWindow.close();
+        let content = "<strong>" + marker.getTitle() + "</strong>";
+        content += "<br>Available Bikes: " + marker.description;
+        content += "<br>Available Stands: " + marker.description2;
+
+        infoWindow.setContent(content);
+        infoWindow.open(marker.getMap(), marker);
+      });
+
+      const toggleMarkersButton = document.getElementById("toggleMarkers");
+      let markersVisible = true;
+
+      toggleMarkersButton.addEventListener("click", () => {
+        markers.forEach((marker) => {
+          marker.setVisible(!markersVisible);
+        });
+        markersVisible = !markersVisible;
+        toggleMarkersButton.innerText = markersVisible
+          ? "Hide Markers"
+          : "Show Markers";
+      });
+    }
   });
 
   let heatmapData = stations.map((station) => {

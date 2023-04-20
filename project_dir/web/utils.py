@@ -1,4 +1,4 @@
-import domain as ValidationResponse
+from domain.validationResponse import ValidationResponse
 import re
 import config
 import hashlib

@@ -12,10 +12,8 @@
       referrerpolicy="no-referrer"
     />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script type="module" src="./static/index.js"></script>
-    <script type="module" src="./static/weather.js"></script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEXSmH1FRzN_xwWqpJ1r44oFO87LmTXtM&callback=initMap"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEXSmH1FRzN_xwWqpJ1r44oFO87LmTXtM&libraries=geometry,visualization&callback=initMap"
       async
       defer
     ></script>
@@ -45,6 +43,7 @@
               <option>Please choose an option</option>
             </select>
             <button id="buildRoute">Go!</button>
+            <div id="duration"></div>
           </div>
           <img id="weather_icon" />
           <div class="weather-main">
@@ -97,7 +96,9 @@
           </div>
         </div>
 
+        <button id="toggleHeatmap">Hide Heatmap</button>
         <button id="toggleMarkers">Hide Markers</button>
+        <button id="showLocation">Show Current Location</button>
         <div id="map"></div>
       </div>
       <div class="weather-container-right">
@@ -144,5 +145,7 @@
       const current_availability = {{ current_availability | safe }}
     </script>
     <script type="module" src="./static/dashboard.js"></script>
+    <script type="module" src="./static/index.js"></script>
+    <script type="module" src="./static/weather.js"></script>
   </body>
 </html>

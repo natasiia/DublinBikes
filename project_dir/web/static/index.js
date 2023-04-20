@@ -171,39 +171,43 @@ function initMap() {
     console.error("Geolocation is not supported by this browser.");
   }
 
+  let directionsRenderer;
+  let startPoint;
+
+  // get the user's current location
+  navigator.geolocation.getCurrentPosition((position) => {
+    startPoint = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    };
+  });
+
   let stations_holder = document.getElementById("station-select");
   let stations_final = document.getElementById("station-dest");
   let buildRouteBtn = document.getElementById("buildRoute");
+  let isDeletingRoute = false;
 
-  stations_holder.innerHTML += "<option>Current location</option>";
+  stations_holder.innerHTML += "<option>CURRENT LOCATION</option>";
 
   stations.forEach((station) => {
     stations_holder.innerHTML += "<option>" + station.name + "</option>";
     stations_final.innerHTML += "<option>" + station.name + "</option>";
   });
 
-  let directionsRenderer;
-
-  // set up the event listener for the button
-  buildRouteBtn.addEventListener("click", () => {
+  function deleteRoute() {
     // delete the old route, if it exists
     if (directionsRenderer) {
       directionsRenderer.setMap(null);
+      let durationDiv = document.getElementById("duration");
+      durationDiv.innerHTML = "";
     }
+  }
+
+  function buildRoute() {
     // get the selected options from the dropdowns
     const startValue = stations_holder.value;
     const endValue = stations_final.value;
 
-    let startPoint;
-    if (startValue == "Current location") {
-      // get the user's current location
-      navigator.geolocation.getCurrentPosition((position) => {
-        startPoint = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-      });
-    }
     let start_index;
     let end_index;
 
@@ -219,13 +223,13 @@ function initMap() {
     // check if both dropdowns have a value selected
     if (startValue && endValue) {
       // get the latitude and longitude for the start and end points
-      let startPoint;
-      if (startValue !== "Current location") {
+      if (startValue !== "CURRENT LOCATION") {
         startPoint = {
           lat: stations[start_index].position_lat,
           lng: stations[start_index].position_lng,
         };
       }
+
       const endPoint = {
         lat: stations[end_index].position_lat,
         lng: stations[end_index].position_lng,
@@ -255,11 +259,35 @@ function initMap() {
             bounds.extend(leg.end_location);
           });
           map.fitBounds(bounds);
+
+          // calculate the total duration of the route
+          let totalDuration = 0;
+          result.routes[0].legs.forEach((leg) => {
+            totalDuration += leg.duration.value;
+          });
+          const minutes = Math.floor(totalDuration / 60);
+
+          // display the duration on the page
+          let durationDiv = document.getElementById("duration");
+          durationDiv.innerHTML = `Trip duration: ${minutes} minutes`;
         } else {
           console.error("Error fetching directions:", result);
           alert("Error fetching directions");
         }
       });
+    }
+  }
+
+  // set up the event listener for the button
+  buildRouteBtn.addEventListener("click", () => {
+    if (isDeletingRoute) {
+      deleteRoute();
+      buildRouteBtn.textContent = "Build Route";
+      isDeletingRoute = false;
+    } else {
+      buildRoute();
+      buildRouteBtn.textContent = "Delete Route";
+      isDeletingRoute = true;
     }
   });
 }

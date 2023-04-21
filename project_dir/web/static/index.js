@@ -77,12 +77,12 @@ function initMap() {
       let content = "";
       if ((marker, (open = "OPEN"))) {
         content =
-          "<span class='open'>OPEN</span> <strong>" +
+          "<span class='open' style='color:green'>OPEN</span> <strong>" +
           marker.getTitle() +
           "</strong>  ";
       } else {
         content =
-          "<span class='close'>CLOSE</span> <strong>" +
+          "<span class='close' style='color:red'>CLOSE</span> <strong>" +
           marker.getTitle() +
           "</strong>  ";
       }
